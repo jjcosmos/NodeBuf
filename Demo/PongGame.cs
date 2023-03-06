@@ -109,7 +109,7 @@ public class PongGame : Game
         }
 
         // Now write sprites/fx to the screen.
-        RenderTrail();
+        WriteTrail();
         WriteSprites();
     }
 
@@ -130,6 +130,11 @@ public class PongGame : Game
         
         _worldSprites.Add(_winText);
     }
+    
+    private void HideWin()
+    {
+        _worldSprites.Remove(_winText);
+    }
 
     private void MakeTrail()
     {
@@ -141,20 +146,6 @@ public class PongGame : Game
         _trail[0] = _ball.Center();
     }
 
-    private void RenderTrail()
-    {
-        for (var i = 0; i < _trail.Length; i++)
-        {
-            var alpha = 1f - (float)i / _trail.Length;
-            Renderer.WritePixelWorldSpace(_trail[i].X, _trail[i].Y, new Float4(1f, 1f, 1f, alpha));
-        }
-    }
-
-    private void HideWin()
-    {
-        _worldSprites.Remove(_winText);
-    }
-    
 
     private void MoveSprites(double delta)
     {
@@ -163,18 +154,18 @@ public class PongGame : Game
             worldSprite.Translate(worldSprite.Velocity.X * (float)delta, worldSprite.Velocity.Y * (float)delta, 0);
         }
     }
+    
+    private void MoveAi(double delta)
+    {
+        var deltaY = _ball.Translation.Y - _player1.Translation.Y;
+        _player1.Translate(0f, deltaY * (float)delta * 3f, 0f);
+    }
 
     private void ClampPlayers()
     {
         var bounds = Renderer.GetRenderBounds();
         ClampToRenderBounds(_player0, bounds);
         ClampToRenderBounds(_player1, bounds);
-    }
-
-    private void MoveAi(double delta)
-    {
-        var deltaY = _ball.Translation.Y - _player1.Translation.Y;
-        _player1.Translate(0f, deltaY * (float)delta * 3f, 0f);
     }
 
     private void SetPlayerVelocity()
@@ -242,30 +233,25 @@ public class PongGame : Game
         }
     }
 
-    private int RandSign()
+    private void WriteTrail()
     {
-        return _random.NextDouble() > 0.5 ? 1 : -1;
-    }
-
-    private float RandRange(float min, float max)
-    {
-        var lerp = (float)_random.NextDouble();
-        return Lerp(min, max, lerp);
+        for (var i = 0; i < _trail.Length; i++)
+        {
+            var alpha = 1f - (float)i / _trail.Length;
+            Renderer.WritePixelWorldSpace(_trail[i].X, _trail[i].Y, new Float4(1f, 1f, 1f, alpha));
+        }
     }
     
-    private static float Lerp(float a, float b, float f)
-    {
-        return a * (1f - f) + (b * f);
-    }
-
     private void WriteSprites()
     {
         foreach (var wSpr in _worldSprites)
         {
-            Renderer.WriteSprite(wSpr.Sprite, wSpr.Translation);
+            Renderer.WriteSpriteWorldSpace(wSpr.Sprite, wSpr.Translation);
         }
     }
 
+    // Utilities
+    
     private static void ClampToRenderBounds(WorldSprite wSpr, PixelBounds bounds)
     {
         var clampedX = Math.Clamp(wSpr.Translation.X, bounds.MinX, bounds.MaxX - wSpr.Sprite.Width);
@@ -303,5 +289,21 @@ public class PongGame : Game
         var bottomRight = new Int2(maxX, minY);
         
         return new Bounds(){TopLeft = topLeft, BottomRight = bottomRight};
+    }
+    
+    private int RandSign()
+    {
+        return _random.NextDouble() > 0.5 ? 1 : -1;
+    }
+
+    private float RandRange(float min, float max)
+    {
+        var lerp = (float)_random.NextDouble();
+        return Lerp(min, max, lerp);
+    }
+    
+    private static float Lerp(float a, float b, float f)
+    {
+        return a * (1f - f) + (b * f);
     }
 }

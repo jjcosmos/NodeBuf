@@ -32,16 +32,4 @@ public class GodotSpriteLoader : ISpriteLoader
 
         return colors;
     }
-
-    public static Float4[] ColorsFromFloatBuf(float[] data)
-    {
-        const int channels = 4;
-        var colors = new Float4[data.Length / channels];
-        for (var i = 0; i < data.Length; i+=channels)
-        {
-            colors[i / 3] = new Float4(data[i], data[i + 1], data[i + 2], data[i + 3]);
-        }
-
-        return colors;
-    }
 }

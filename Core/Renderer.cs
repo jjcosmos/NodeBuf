@@ -41,19 +41,15 @@ public class Renderer
             WriteBlend(screenY * _window.Width + screenX, color);
         }
     }
-    
 
-    public void WriteSprite(ArraySprite sprite, Translation t)
+    public void WriteSpriteScreenSpace(ArraySprite sprite, Int2 position)
     {
-        var screenX = t.X - Camera.Translation.X;
-        var screenY = t.Y - Camera.Translation.Y;
-        
         for(var y = 0; y < sprite.Height; y ++)
         {
             for(var x = 0; x < sprite.Width; x++)
             {
-                var pixelPosX = (int)(screenX + x);
-                var pixelPosY = (int)(screenY + y);
+                var pixelPosX = position.X + x;
+                var pixelPosY = position.Y + y;
 
                 if (PositionInBounds(pixelPosX, pixelPosY))
                 {
@@ -63,6 +59,14 @@ public class Renderer
                 }
             }
         }
+    }
+    
+    public void WriteSpriteWorldSpace(ArraySprite sprite, Translation t)
+    {
+        var screenX = t.X - Camera.Translation.X;
+        var screenY = t.Y - Camera.Translation.Y;
+        
+        WriteSpriteScreenSpace(sprite, new Int2(screenX, screenY));
     }
 
     private void WriteBlend(int index, Float4 newColor)

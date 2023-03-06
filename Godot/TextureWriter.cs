@@ -5,7 +5,7 @@ using Window = NodeBuf.Core.Window;
 
 namespace NodeBuf.Godot;
 
-public partial class TexRect : TextureRect, IPixelWriter
+public partial class TextureWriter : TextureRect, IPixelWriter
 {
 	private Image _image;
 	private ImageTexture _imTex;
