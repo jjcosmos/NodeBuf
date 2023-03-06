@@ -1,8 +1,9 @@
 using Godot;
 using NodeBuf.Core;
+using NodeBuf.Demo;
 using Window = NodeBuf.Core.Window;
 
-namespace NodeBuf.Demo;
+namespace NodeBuf.Godot;
 
 public partial class TexRect : TextureRect, IPixelWriter
 {

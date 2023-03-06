@@ -22,6 +22,9 @@ public class PongGame : Game
     private WorldSprite _ball;
 
     private Random _random;
+    private bool _showingWin;
+    private float _winTimer;
+    private WorldSprite _winText;
 
     private Int2[] _trail;
 
@@ -109,10 +112,6 @@ public class PongGame : Game
         RenderTrail();
         WriteSprites();
     }
-
-    private bool _showingWin;
-    private float _winTimer;
-    private WorldSprite _winText;
 
     private void ShowWin(bool isLocalPlayer)
     {
@@ -231,7 +230,7 @@ public class PongGame : Game
         var maxY = launchSpeed / 1.2f;
         var window = Renderer.Window;
         
-        _ball.Translation = new Translation(window.Width / 2f, window.Height / 2f, 0);
+        _ball.Translation = new Translation(window.Width / 2f - _ball.Sprite.Width / 2f, window.Height / 2f - _ball.Sprite.Height / 2f, 0);
         _ball.Velocity = new Velocity(RandSign() * launchSpeed, RandRange(maxY / 2f, maxY) * RandSign());
 
         _player0.Translation = new Translation(window.Width - _playerSprite.Width, window.Height / 2f, 0);
@@ -304,45 +303,5 @@ public class PongGame : Game
         var bottomRight = new Int2(maxX, minY);
         
         return new Bounds(){TopLeft = topLeft, BottomRight = bottomRight};
-    }
-
-    private class WorldSprite : Transform
-    {
-        public ArraySprite Sprite;
-        public CollisionBounds Collision;
-        public Velocity Velocity;
-
-        public Int2 Center()
-        {
-            return new Int2(Translation.X + Sprite.Width / 2f, Translation.Y + Sprite.Height / 2f);
-        }
-    }
-
-    private struct Velocity
-    {
-        public float X;
-        public float Y;
-
-        public Velocity(float x = 0f, float y = 0f)
-        {
-            X = x;
-            Y = y;
-        }
-    }
-    
-    private readonly struct CollisionBounds
-    {
-        public readonly int Width;
-        public readonly int Height;
-        public readonly int PxOffsetX;
-        public readonly int PxOffsetY;
-
-        public CollisionBounds(int width, int height, int pxOffsetX, int pxOffsetY)
-        {
-            Width = width;
-            Height = height;
-            PxOffsetX = pxOffsetX;
-            PxOffsetY = pxOffsetY;
-        }
     }
 }

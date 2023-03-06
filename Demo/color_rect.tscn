@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://ckhwhk8h2eipy"]
+[gd_scene load_steps=3 format=3 uid="uid://ciaw7rd4v1ww"]
 
 [ext_resource type="Texture2D" uid="uid://ba3lddffh2bft" path="res://Demo/icon.svg" id="1_vb3af"]
-[ext_resource type="Script" path="res://Demo/TexRect.cs" id="2_awcvq"]
+[ext_resource type="Script" path="res://Godot/TexRect.cs" id="2_awcvq"]
 
 [node name="TextureRect" type="TextureRect"]
 anchors_preset = 15

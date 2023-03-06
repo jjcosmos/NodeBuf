@@ -1,7 +1,7 @@
 ﻿using Godot;
 using NodeBuf.Core;
 
-namespace NodeBuf.Demo;
+namespace NodeBuf.Godot;
 
 public class GodotSpriteLoader : ISpriteLoader
 {
