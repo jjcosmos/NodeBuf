@@ -1,8 +1,6 @@
-﻿using Godot;
-
-namespace NodeBuf.Core;
+﻿namespace NodeBuf.Core;
 
 public interface IPixelWriter
 {
-    public void Write(Color[] pixels);
+    public void Write(Float4[] pixels);
 }

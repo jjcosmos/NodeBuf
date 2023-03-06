@@ -1,20 +1,18 @@
-﻿using Godot;
-
-namespace NodeBuf.Core;
+﻿namespace NodeBuf.Core;
 
 public class Renderer
 {
     public Camera Camera;
     public Window Window => _window;
     
-    private Color[] _buf;
+    private Float4[] _buf;
     private IPixelWriter _writer;
     private Window _window;
     
     public Renderer(Window win, IPixelWriter writer)
     {
         _window = win;
-        _buf = new Color[win.Area()];
+        _buf = new Float4[win.Area()];
         _writer = writer;
         Camera = new Camera(win.Width, win.Height);
     }
@@ -28,7 +26,7 @@ public class Renderer
         return new PixelBounds((int)minX, (int)maxX, (int)minY, (int)maxY);
     }
 
-    public void WritePixel(int worldPositionX, int worldPositionY, Color color)
+    public void WritePixel(int worldPositionX, int worldPositionY, Float4 color)
     {
         var screenX = (int)(worldPositionX - Camera.Translation.X);
         var screenY = (int)(worldPositionY - Camera.Translation.Y);
@@ -63,7 +61,7 @@ public class Renderer
         }
     }
 
-    private void WriteBlend(int index, Color newColor)
+    private void WriteBlend(int index, Float4 newColor)
     {
         _buf[index] = _buf[index].Blend(newColor);
     }

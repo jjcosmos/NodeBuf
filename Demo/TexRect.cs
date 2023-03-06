@@ -1,15 +1,16 @@
 using Godot;
-using NodeBuf;
 using NodeBuf.Core;
 using Window = NodeBuf.Core.Window;
+
+namespace NodeBuf.Demo;
 
 public partial class TexRect : TextureRect, IPixelWriter
 {
 	private Image _image;
 	private ImageTexture _imTex;
 	
-	private int _width = 64;
-	private int _height = 64;
+	private readonly int _width = 64;
+	private readonly int _height = 64;
 	
 	private Game _game;
 	
@@ -21,7 +22,7 @@ public partial class TexRect : TextureRect, IPixelWriter
 		TextureFilter = TextureFilterEnum.Nearest;
 		Engine.MaxFps = 30;
 
-		var window = new Window(_width, _height, Colors.Blue);
+		var window = new Window(_width, _height, new Float4(0, 0, 1f, 1f));
 		var loader = new GodotSpriteLoader();
 		
 		_game = new PongGame(window, this, loader);
@@ -33,15 +34,15 @@ public partial class TexRect : TextureRect, IPixelWriter
 		_game.Tick(delta);
 	}
 
-	public void Write(Color[] pixels)
+	public void Write(Float4[] pixels)
 	{
 		var area = _width * _height;
 		for(var i = 0; i < area; i ++)
 		{
 			var y = i / _height;
 			var x = i % _width;
-			
-			_image.SetPixel(x, y, pixels[i]);
+			var color = pixels[i];
+			_image.SetPixel(x, y, new Color(color.X, color.Y, color.Z, color.W));
 		}
 		_imTex.Update(_image);
 	}

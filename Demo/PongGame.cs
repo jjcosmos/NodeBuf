@@ -5,7 +5,7 @@ using NodeBuf.Core;
 using Translation = NodeBuf.Core.Translation;
 using Window = NodeBuf.Core.Window;
 
-namespace NodeBuf;
+namespace NodeBuf.Demo;
 
 public class PongGame : Game
 {
@@ -16,6 +16,7 @@ public class PongGame : Game
     private ArraySprite _player1WinSprite;
     
     private List<WorldSprite> _worldSprites;
+    
     private WorldSprite _player0;
     private WorldSprite _player1;
     private WorldSprite _ball;
@@ -78,13 +79,11 @@ public class PongGame : Game
 
     private const string UP = "ui_up";
     private const string DOWN = "ui_down";
-    private const string RIGHT = "ui_right";
-    private const string LEFT = "ui_left";
 
     protected override void OnTick(double delta)
     {
-        // Camera should move before drawing, as sprites are written directly to the pixel buffer relative to the camera.
-        UpdateCamera(delta);
+        // If the camera moves, do it before drawing.
+        // Sprites are written directly to the pixel buffer relative to the camera.
 
         if (_showingWin)
         {
@@ -106,13 +105,13 @@ public class PongGame : Game
             CollideBall();
         }
 
-        // Now write sprites to the screen.
+        // Now write sprites/fx to the screen.
         RenderTrail();
         WriteSprites();
     }
 
-    private bool _showingWin = false;
-    private float _winTimer = 0f;
+    private bool _showingWin;
+    private float _winTimer;
     private WorldSprite _winText;
 
     private void ShowWin(bool isLocalPlayer)
@@ -148,7 +147,7 @@ public class PongGame : Game
         for (var i = 0; i < _trail.Length; i++)
         {
             var alpha = 1f - (float)i / _trail.Length;
-            Renderer.WritePixel(_trail[i].X, _trail[i].Y, new Color(1f, 1f, 1f, alpha));
+            Renderer.WritePixel(_trail[i].X, _trail[i].Y, new Float4(1f, 1f, 1f, alpha));
         }
     }
 
@@ -156,12 +155,7 @@ public class PongGame : Game
     {
         _worldSprites.Remove(_winText);
     }
-
-    private void UpdateCamera(double delta)
-    {
-        var camInput = Input.GetAxis(LEFT, RIGHT) * delta * 50f;
-        Renderer.Camera.Translation = Renderer.Camera.Translation.Translate((float)camInput, 0f, 0f);
-    }
+    
 
     private void MoveSprites(double delta)
     {
@@ -251,7 +245,7 @@ public class PongGame : Game
 
     private int RandSign()
     {
-        return _random.Next(-10, 10) > 0 ? 1 : -1;
+        return _random.NextDouble() > 0.5 ? 1 : -1;
     }
 
     private float RandRange(float min, float max)
