@@ -146,7 +146,7 @@ public class PongGame : Game
         for (var i = 0; i < _trail.Length; i++)
         {
             var alpha = 1f - (float)i / _trail.Length;
-            Renderer.WritePixel(_trail[i].X, _trail[i].Y, new Float4(1f, 1f, 1f, alpha));
+            Renderer.WritePixelWorldSpace(_trail[i].X, _trail[i].Y, new Float4(1f, 1f, 1f, alpha));
         }
     }
 

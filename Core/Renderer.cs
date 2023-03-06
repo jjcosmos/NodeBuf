@@ -26,15 +26,19 @@ public class Renderer
         return new PixelBounds((int)minX, (int)maxX, (int)minY, (int)maxY);
     }
 
-    public void WritePixel(int worldPositionX, int worldPositionY, Float4 color)
+    public void WritePixelWorldSpace(int worldPositionX, int worldPositionY, Float4 color)
     {
         var screenX = (int)(worldPositionX - Camera.Translation.X);
         var screenY = (int)(worldPositionY - Camera.Translation.Y);
 
+        WritePixelScreenSpace(screenX, screenY, color);
+    }
+
+    public void WritePixelScreenSpace(int screenX, int screenY, Float4 color)
+    {
         if (PositionInBounds(screenX, screenY))
         {
-            var windowIndex = screenY * _window.Width + screenX;
-            WriteBlend(windowIndex, color);
+            WriteBlend(screenY * _window.Width + screenX, color);
         }
     }
     
