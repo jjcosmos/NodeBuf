@@ -36,14 +36,17 @@ public partial class TexRect : TextureRect, IPixelWriter
 
 	public void Write(Float4[] pixels)
 	{
-		var area = _width * _height;
-		for(var i = 0; i < area; i ++)
+		var counter = 0;
+		for (var y = 0; y < _height; y++)
 		{
-			var y = i / _height;
-			var x = i % _width;
-			var color = pixels[i];
-			_image.SetPixel(x, y, new Color(color.X, color.Y, color.Z, color.W));
+			for (var x = 0; x < _width; x++)
+			{
+				var color = pixels[counter];
+				_image.SetPixel(x, y, new Color(color.X, color.Y, color.Z, color.W));
+				counter++;
+			}
 		}
+
 		_imTex.Update(_image);
 	}
 }
